@@ -12,7 +12,7 @@
     scoring a point for the opponent.
 ]]
 
-Ball = Class{}
+Ball = Class {}
 
 function Ball:init(x, y, width, height)
     self.x = x
@@ -41,7 +41,7 @@ function Ball:collides(paddle)
     -- edge of the other
     if self.y > paddle.y + paddle.height or paddle.y > self.y + self.height then
         return false
-    end 
+    end
 
     -- if the above aren't true, they're overlapping
     return true
@@ -68,4 +68,25 @@ end
 
 function Ball:render()
     love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
+end
+
+--[[
+   Renders the ball's X and Y directional speeds on the display  
+]]
+function Ball:displaySpeed(font)
+    -- draw ball's speed, i.e., its dx and dy
+    love.graphics.setFont(font)
+    love.graphics.setColor(235 / 255, 47 / 255, 49 / 255)
+    love.graphics.print('y-speed: ' .. tostring(ball.dy), 30, VIRTUAL_HEIGHT / 3)
+    love.graphics.print('x-speed: ' .. tostring(ball.dx), 30, (VIRTUAL_HEIGHT / 3) + 10)
+end
+
+--[[
+   Renders the ball's X-axis and Y-axis on the display 
+]]
+function Ball:displayAxis(font)
+    love.graphics.setFont(font)
+    love.graphics.setColor(145 / 255, 6 / 255, 184 / 255)
+    love.graphics.print('y-axis: ' .. tostring(ball.y), 30, VIRTUAL_HEIGHT / 3 + 20)
+    love.graphics.print('x-axis: ' .. tostring(ball.x), 30, (VIRTUAL_HEIGHT / 3) + 30)
 end

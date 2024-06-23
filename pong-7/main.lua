@@ -164,9 +164,9 @@ function love.update(dt)
         player2.dy = 0
     end
 
-    -- update our ball based on its DX and DY only if we're in play state;
+    -- update our ball based on its DX and DY only if we're in play state and not in pause state;
     -- scale the velocity by dt so movement is framerate-independent
-    if gameState == 'play' then
+    if gameState == 'play' and gameState ~= 'pause' then
         ball:update(dt)
     end
 
@@ -186,14 +186,18 @@ function love.keypressed(key)
         -- if we press enter during the start state of the game, we'll go into play mode
         -- during play mode, the ball will move in a random direction
     elseif key == 'enter' or key == 'return' then
-        if gameState == 'start' then
+        if gameState == 'start' or gameState == 'pause' then
             gameState = 'play'
-        else
-            gameState = 'start'
-
-            -- ball's new reset method
-            ball:reset()
+        elseif gameState == 'play' then
+            -- if we press enter during the play state, we'll go into pause mode
+            -- during the pause mode, the ball's X and Y axis are on hold
+            gameState = 'pause'
         end
+    elseif key == 'r' then
+        gameState = 'start'
+
+        -- ball's new reset method
+        ball:reset()
     end
 end
 
@@ -214,6 +218,8 @@ function love.draw()
 
     if gameState == 'start' then
         love.graphics.printf('Hello Start State!', 0, 20, VIRTUAL_WIDTH, 'center')
+    elseif gameState == 'pause' then
+        love.graphics.printf('Hello Pause State!', 0, 20, VIRTUAL_WIDTH, 'center')
     else
         love.graphics.printf('Hello Play State!', 0, 20, VIRTUAL_WIDTH, 'center')
     end
@@ -236,8 +242,11 @@ function love.draw()
     -- new function just to demonstrate how to see FPS in LÖVE2D
     displayFPS()
 
-    -- new function just to display the ball's X and Y speeds
-    displaySpeed()
+    -- display the ball's X and Y directional speeds using the ball's displaySpeed method
+    ball:displaySpeed(smallFont)
+
+    -- display the ball's X-axis and Y-axis using the ball's displayAxis method
+    ball:displayAxis(smallFont)
 
     -- end rendering at virtual resolution
     push:apply('end')
@@ -251,12 +260,4 @@ function displayFPS()
     love.graphics.setFont(smallFont)
     love.graphics.setColor(0, 255 / 255, 0, 255 / 255)
     love.graphics.print('FPS: ' .. tostring(love.timer.getFPS()), 10, 10)
-end
-
-function displaySpeed()
-    -- draw ball's speed, i.e., its dx and dy
-    love.graphics.setFont(smallFont)
-    love.graphics.setColor(235/255, 47/255, 49/255)
-    love.graphics.print('y-speed: ' .. tostring(ball.dy), 30, VIRTUAL_HEIGHT / 3)
-    love.graphics.print('x-speed: ' .. tostring(ball.dx), 30, (VIRTUAL_HEIGHT / 3) + 30)
 end
