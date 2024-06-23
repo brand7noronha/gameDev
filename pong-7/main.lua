@@ -16,7 +16,7 @@
 
     This version is built to more closely resemble the NES than
     the original Pong machines or the Atari 2600 in terms of
-    resolution, though in widescreen (16:9) so it looks nicer on 
+    resolution, though in widescreen (16:9) so it looks nicer on
     modern systems.
 ]]
 
@@ -103,7 +103,7 @@ function love.load()
 end
 
 --[[
-    Runs every frame, with "dt" passed in, our delta in seconds 
+    Runs every frame, with "dt" passed in, our delta in seconds
     since the last frame, which LÖVE2D supplies us.
 ]]
 function love.update(dt)
@@ -175,7 +175,7 @@ function love.update(dt)
 end
 
 --[[
-    Keyboard handling, called by LÖVE2D each frame; 
+    Keyboard handling, called by LÖVE2D each frame;
     passes in the key we pressed so we can access.
 ]]
 function love.keypressed(key)
@@ -183,8 +183,8 @@ function love.keypressed(key)
     if key == 'escape' then
         -- function LÖVE gives us to terminate application
         love.event.quit()
-    -- if we press enter during the start state of the game, we'll go into play mode
-    -- during play mode, the ball will move in a random direction
+        -- if we press enter during the start state of the game, we'll go into play mode
+        -- during play mode, the ball will move in a random direction
     elseif key == 'enter' or key == 'return' then
         if gameState == 'start' then
             gameState = 'play'
@@ -198,7 +198,7 @@ function love.keypressed(key)
 end
 
 --[[
-    Called after update by LÖVE2D, used to draw anything to the screen, 
+    Called after update by LÖVE2D, used to draw anything to the screen,
     updated or otherwise.
 ]]
 function love.draw()
@@ -207,7 +207,7 @@ function love.draw()
 
     -- clear the screen with a specific color; in this case, a color similar
     -- to some versions of the original Pong
-    love.graphics.clear(40/255, 45/255, 52/255, 255/255)
+    love.graphics.clear(40 / 255, 45 / 255, 52 / 255, 255 / 255)
 
     -- draw different things based on the state of the game
     love.graphics.setFont(smallFont)
@@ -221,7 +221,7 @@ function love.draw()
     -- draw score on the left and right center of the screen
     -- need to switch font to draw before actually printing
     love.graphics.setFont(scoreFont)
-    love.graphics.print(tostring(player1Score), VIRTUAL_WIDTH / 2 - 50, 
+    love.graphics.print(tostring(player1Score), VIRTUAL_WIDTH / 2 - 50,
         VIRTUAL_HEIGHT / 3)
     love.graphics.print(tostring(player2Score), VIRTUAL_WIDTH / 2 + 30,
         VIRTUAL_HEIGHT / 3)
@@ -236,6 +236,9 @@ function love.draw()
     -- new function just to demonstrate how to see FPS in LÖVE2D
     displayFPS()
 
+    -- new function just to display the ball's X and Y speeds
+    displaySpeed()
+
     -- end rendering at virtual resolution
     push:apply('end')
 end
@@ -246,6 +249,14 @@ end
 function displayFPS()
     -- simple FPS display across all states
     love.graphics.setFont(smallFont)
-    love.graphics.setColor(0, 255/255, 0, 255/255)
+    love.graphics.setColor(0, 255 / 255, 0, 255 / 255)
     love.graphics.print('FPS: ' .. tostring(love.timer.getFPS()), 10, 10)
+end
+
+function displaySpeed()
+    -- draw ball's speed, i.e., its dx and dy
+    love.graphics.setFont(smallFont)
+    love.graphics.setColor(235/255, 47/255, 49/255)
+    love.graphics.print('y-speed: ' .. tostring(ball.dy), 30, VIRTUAL_HEIGHT / 3)
+    love.graphics.print('x-speed: ' .. tostring(ball.dx), 30, (VIRTUAL_HEIGHT / 3) + 30)
 end
